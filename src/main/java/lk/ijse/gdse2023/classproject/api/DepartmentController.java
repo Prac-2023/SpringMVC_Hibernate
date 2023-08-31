@@ -41,7 +41,7 @@ public class DepartmentController {
 
    @ResponseStatus(HttpStatus.NO_CONTENT)
    @PatchMapping("{id}")
-   void updateEmployee(@PathVariable String id,@RequestBody EmployeeDTO employee){
+   void updateDepartment(@PathVariable String id,@RequestBody EmployeeDTO employee){
        System.out.println(id);
        System.out.println(employee);
    }

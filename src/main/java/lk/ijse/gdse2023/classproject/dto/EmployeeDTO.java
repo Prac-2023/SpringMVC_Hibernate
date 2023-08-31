@@ -11,6 +11,7 @@ public class EmployeeDTO {
     private String empID;
     private String empName;
     private String empEmail;
-    private String empDep;
+    private String empDepID;
     private String empProfile;
+
 }

@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class EmployeeController {
    EmployeeDTO saveEmployeeWithProfile(
            @RequestPart String name,
            @RequestPart String email,
-           @RequestPart String department,
+           @RequestPart String departmentId,
            @RequestPart byte [] profile
    ) throws Exception {
        //convert byte to base64string
@@ -38,7 +37,7 @@ public class EmployeeController {
        EmployeeDTO employeeObj = new EmployeeDTO();
        employeeObj.setEmpName(name);
        employeeObj.setEmpEmail(email);
-       employeeObj.setEmpDep(department);
+       employeeObj.setEmpDepID(departmentId);
        employeeObj.setEmpProfile(profileToBase64);
 
        return employeeService.saveEmployee(employeeObj);
@@ -53,9 +52,8 @@ public class EmployeeController {
    void updateEmployee(@PathVariable String empId,
                        @RequestPart String updatedName,
                        @RequestPart String updatedEmail,
-                       @RequestPart String updatedDepartment,
+                       @RequestPart String updatedDepartmentId,
                        @RequestPart byte [] updatedProfile
-
 
    ){
        String updatedProfileBase64 = Base64.getEncoder().encodeToString(updatedProfile);
@@ -63,7 +61,7 @@ public class EmployeeController {
        EmployeeDTO tobeUpdatedEmp = new EmployeeDTO();
        tobeUpdatedEmp.setEmpName(updatedName);
        tobeUpdatedEmp.setEmpEmail(updatedEmail);
-       tobeUpdatedEmp.setEmpDep(updatedDepartment);
+       tobeUpdatedEmp.setEmpDepID(updatedDepartmentId);
        tobeUpdatedEmp.setEmpProfile(updatedProfileBase64);
 
        employeeService.updateEmployee(empId,tobeUpdatedEmp);

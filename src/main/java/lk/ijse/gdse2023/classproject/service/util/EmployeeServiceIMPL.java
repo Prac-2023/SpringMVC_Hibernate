@@ -1,8 +1,10 @@
 package lk.ijse.gdse2023.classproject.service.util;
 
 import lk.ijse.gdse2023.classproject.dto.EmployeeDTO;
+import lk.ijse.gdse2023.classproject.entity.Department;
 import lk.ijse.gdse2023.classproject.entity.Employee;
 import lk.ijse.gdse2023.classproject.entityDTOConversion.EntityDTOConversion;
+import lk.ijse.gdse2023.classproject.repository.DepartmentRepository;
 import lk.ijse.gdse2023.classproject.repository.EmployeeRepository;
 import lk.ijse.gdse2023.classproject.service.EmployeeService;
 import lk.ijse.gdse2023.classproject.util.HibernateBTR;
@@ -24,27 +26,28 @@ import java.util.UUID;
 @Transactional
 public class EmployeeServiceIMPL implements EmployeeService {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+   public final EmployeeRepository employeeRepository;
+   public final DepartmentRepository departmentRepository;
+   public final EntityDTOConversion entityDTOConversion;
 
-    @Autowired
-    EmployeeRepository employeeRepository;
+    public EmployeeServiceIMPL(EmployeeRepository employeeRepository,
+                               DepartmentRepository departmentRepository,EntityDTOConversion entityDTOConversion){
 
-
-    @Override
-    public EmployeeDTO saveEmployee(EmployeeDTO employeeDTO) throws Exception {
-        employeeDTO.setEmpID(UUID.randomUUID().toString());
-        Employee employeeEntity = convertToEntity(employeeDTO);
-        return convertToDTO(employeeRepository.save(employeeEntity));
-
+        this.employeeRepository = employeeRepository;
+        this.departmentRepository = departmentRepository;
+        this.entityDTOConversion = entityDTOConversion;
 
     }
 
     @Override
-    public EmployeeDTO saveEmployeePlusProfile(EmployeeDTO employee) {
-        //convert via Model Mapper
+    public EmployeeDTO saveEmployee(EmployeeDTO employeeDTO) throws Exception {
+        employeeDTO.setEmpID(UUID.randomUUID().toString());
 
-        return null;
+        Employee employeeEntity = entityDTOConversion.getEmployee(employeeDTO);
+        employeeEntity.setDepartment(getDepartment(employeeDTO.getEmpDepID()));
+        employeeRepository.saveEmployee(employeeEntity);
+        return entityDTOConversion.getEmployeeDTO(employeeEntity);
+
     }
 
     @Override
@@ -60,6 +63,15 @@ public class EmployeeServiceIMPL implements EmployeeService {
     @Override
     public void updateEmployee(String id, EmployeeDTO employee) {
 
+    }
+    private Department getDepartment(String depId) {
+        Department departmentById = departmentRepository.findById(depId);
+        if(departmentById != null){
+            return departmentById;
+        }else {
+            //revamp
+            return null;
+        }
     }
 //    List<EmployeeDTO>empLst = new ArrayList<>();
 //
@@ -109,23 +121,23 @@ public class EmployeeServiceIMPL implements EmployeeService {
 //    public void updateEmployee(String id, EmployeeDTO employee) {
 //    }
 
-    private Employee convertToEntity(EmployeeDTO employeeDTO) {
-        Employee employee = new Employee();
-        employee.setEmpID(employeeDTO.getEmpID());
-        employee.setEmpName(employeeDTO.getEmpName());
-        employee.setEmpEmail(employeeDTO.getEmpEmail());
-        employee.setEmpDep(employeeDTO.getEmpDep());
-        return employee;
-    }
-
-    private EmployeeDTO convertToDTO(Employee employee) {
-        EmployeeDTO employeeDTO = new EmployeeDTO();
-        employeeDTO.setEmpID(employee.getEmpID());
-        employeeDTO.setEmpName(employee.getEmpName());
-        employeeDTO.setEmpEmail(employee.getEmpEmail());
-        employeeDTO.setEmpDep(employee.getEmpDep());
-        return employeeDTO;
-    }
+//    private Employee convertToEntity(EmployeeDTO employeeDTO) {
+//        Employee employee = new Employee();
+//        employee.setEmpID(employeeDTO.getEmpID());
+//        employee.setEmpName(employeeDTO.getEmpName());
+//        employee.setEmpEmail(employeeDTO.getEmpEmail());
+//        employee.setDepartment(employeeDTO.getEmpDep());
+//        return employee;
+//    }
+//
+//    private EmployeeDTO convertToDTO(Employee employee) {
+//        EmployeeDTO employeeDTO = new EmployeeDTO();
+//        employeeDTO.setEmpID(employee.getEmpID());
+//        employeeDTO.setEmpName(employee.getEmpName());
+//        employeeDTO.setEmpEmail(employee.getEmpEmail());
+//        employeeDTO.setEmpDep(employee.getEmpDep());
+//        return employeeDTO;
+//    }
 
 
 }

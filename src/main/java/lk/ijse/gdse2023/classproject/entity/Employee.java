@@ -18,11 +18,14 @@ public class Employee implements SuperEntity{
     private String empName;
     @Column(nullable = false)
     private String empEmail;
-    @Column(nullable = false)
-    private String empDep;
     private String empProfile;
 
-    @JoinColumn(name = "departmentId",referencedColumnName = "depId",nullable = false)
     @ManyToOne
+    @JoinColumn(name = "departmentId",referencedColumnName = "depId",nullable = false)
     private Department department;
+
+    public Employee(String empID,Department department) {
+        this.department = department;
+        this.empID = empID;
+    }
 }

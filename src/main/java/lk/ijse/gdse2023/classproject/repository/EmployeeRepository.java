@@ -8,7 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface EmployeeRepository extends JpaRepository<Employee,String>{
+public interface EmployeeRepository {
    Employee saveEmployee(Employee employee);
    List<Employee> getAll();
    void deleteEmployee(String id);
