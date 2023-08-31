@@ -7,10 +7,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class EmployeeDTO {
-    private String empID;
-    private String empName;
-    private String empEmail;
-    private String empDep;
-    private String empProfile;
+public class DepartmentDTO {
+    private String depId;
+    private String depName;
 }

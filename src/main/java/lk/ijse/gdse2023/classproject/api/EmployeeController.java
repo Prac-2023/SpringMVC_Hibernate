@@ -20,39 +20,39 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/employee")
 public class EmployeeController {
+
     @Bean
-    public ModelMapper modelMapper(){
+    ModelMapper modelMapper(){
         return new ModelMapper();
     }
-
     @Autowired
     private EmployeeService employeeService;
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-   EmployeeDTO saveEmployee(@RequestBody EmployeeDTO employee){
+    @PostMapping(consumes = "application/json", produces = "application/json")
+   EmployeeDTO saveEmployee(@RequestBody EmployeeDTO employee) throws Exception {
        //ToDo:validate the request
-
         return employeeService.saveEmployee(employee);
-   }
-   @ResponseStatus(HttpStatus.CREATED)
-   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-   EmployeeDTO saveEmployeeWithProfile(
-           @RequestPart String name,
-           @RequestPart String email,
-           @RequestPart String department,
-           @RequestPart byte [] profile
-   )
-
-   {
-       System.out.println(name);
-       System.out.println(email);
-       System.out.println(department);
-       System.out.println(Arrays.toString(profile));
-
-     return employeeService.saveEmployeePlusProfile(new EmployeeDTO(name,email,department,profile));
 
    }
+  // @ResponseStatus(HttpStatus.CREATED)
+//   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//   EmployeeDTO saveEmployeeWithProfile(
+//           @RequestPart String name,
+//           @RequestPart String email,
+//           @RequestPart String department,
+//           @RequestPart byte [] profile
+//   )
+//
+//   {
+//       System.out.println(name);
+//       System.out.println(email);
+//       System.out.println(department);
+//       System.out.println(Arrays.toString(profile));
+//
+//     return employeeService.saveEmployeePlusProfile(new EmployeeDTO(name,email,department,profile));
+//
+//   }
    @ResponseStatus(HttpStatus.NO_CONTENT)
    @DeleteMapping("{id}")
    void deleteEmployee(@PathVariable String id){
